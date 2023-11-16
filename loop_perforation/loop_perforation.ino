@@ -1,90 +1,83 @@
+#include <String.h>
+
+void cleanMatrix();
 void mulMatMod();
 void mulMatTrunc();
 void mulMatNorm();
-const int matSize=30;
+
+const int matSize = 50;
 float perforationRate = 0.3;
+
+String matrixSend;
 
 int data1[matSize][matSize];
 int data2[matSize][matSize];
-int dataNorm[matSize][matSize], somaNorm;
-int dataMod[matSize][matSize], somaMod;
-int dataTrunc[matSize][matSize], somaTrunc;
+int dataSend[matSize][matSize];
 
 void setup() {
   Serial.begin(9600);
   randomSeed(30);
 
-  
-
-  for(int i=0;i<matSize;i++){
-    for(int j=0;j<matSize;j++){
-      data1[i][j]=random(300);
+  for (int i = 0; i < matSize; i++) {
+    for (int j = 0; j < matSize; j++) {
+      data1[i][j] = random(300);
     }
   }
 
-  for(int i=0;i<matSize;i++){
-    for(int j=0;j<matSize;j++){
-      data2[i][j]=random(300);
+  for (int i = 0; i < matSize; i++) {
+    for (int j = 0; j < matSize; j++) {
+      data2[i][j] = random(300);
     }
   }
 
-  mulMatNorm(data1, data2, dataNorm);
-  mulMatMod(data1, data2, dataMod);
-  mulMatTrunc(data1, data2, dataTrunc);
- 
-  Serial.println("Teste de Loop Perforation");
-  int timeOnMillis=millis();
+  cleanMatrix(dataSend);
+  mulMatNorm(data1, data2, dataSend);
+
+  int timeOnMillis = millis();
   Serial.print("\n-------------------------Normal--------------------------\n");
   for (int i = 0; i < matSize; i++) {
     for (int j = 0; j < matSize; j++) {
-      somaNorm+=dataNorm[i][j];
-      Serial.print(dataNorm[i][j]);
-      Serial.print(" ");
+      matrixSend += dataSend[i][j];
+      matrixSend += " ";
     }
-    Serial.println("");
+    matrixSend += "\n";
   }
-  timeOnMillis=millis()-timeOnMillis;
-  Serial.println();
-  Serial.print("Tempo usado para calcular Matriz: "+(String)timeOnMillis+"ms\n");
-  Serial.println();
+  timeOnMillis = millis() - timeOnMillis;
+  matrixSend += (String)timeOnMillis + "ms\n";
 
-  timeOnMillis=millis();
-  
+  timeOnMillis = millis();
+
+  cleanMatrix(dataSend);
+  mulMatMod(data1, data2, dataSend);
+
   Serial.print("--------------------------Modular---------------------------\n");
   for (int i = 0; i < matSize; i++) {
     for (int j = 0; j < matSize; j++) {
-        somaMod+=dataMod[i][j];
-      Serial.print(dataMod[i][j]);
-      Serial.print(" ");
+      matrixSend += dataSend[i][j];
+      matrixSend += " ";
     }
-    Serial.println("");
+    matrixSend += "\n";
   }
 
-  timeOnMillis=millis()-timeOnMillis;
-  Serial.println();
-  Serial.print("Tempo usado para calcular Matriz: "+(String)timeOnMillis+"ms\n");
-  Serial.println();
-  timeOnMillis=millis();
+  timeOnMillis = millis() - timeOnMillis;
+  matrixSend += (String)timeOnMillis + "ms\n";
+  timeOnMillis = millis();
+
+  cleanMatrix(dataSend);
+  mulMatTrunc(data1, data2, dataSend);
+
   Serial.print("-------------------------Truncation---------------------------\n");
   for (int i = 0; i < matSize; i++) {
     for (int j = 0; j < matSize; j++) {
-      somaTrunc+=dataTrunc[i][j];
-      Serial.print(dataTrunc[i][j]);
-      Serial.print(" ");
+      matrixSend += dataSend[i][j];
+      matrixSend += " ";
     }
-    Serial.println("");
+    matrixSend += "\n";
   }
 
-  timeOnMillis=millis()-timeOnMillis;
+  timeOnMillis = millis() - timeOnMillis;
   Serial.println();
-  Serial.print("Tempo usado para calcular Matriz: "+(String)timeOnMillis+"ms\n");
-  //Serial.println();
-  /*
-  Serial.print("\nSoma do normal: "+(String)somaNorm+"\n");
-  Serial.print("Soma do Modular: "+(String)somaMod+"\n");
-  Serial.print("Soma do Truncation: "+(String)somaTrunc+"\n");
-
-  */
+  matrixSend += (String)timeOnMillis + "ms\n";
 }
 
 void loop() {
@@ -123,11 +116,18 @@ void mulMatNorm(int a[matSize][matSize], int b[matSize][matSize], int c[matSize]
   }
 }
 
-void matResult(int matReference[matSize][matSize], int matAprox[matSize][matSize], int matReturn[matSize][matSize]){
-    for (int i = 0; i < matSize; i++) {
-      for (int j = 0; j < matSize; j++) {
-        //c[i][j] = 0;
-        matReturn[i][j]=matReference[i][j]-matAprox[i][j];
+void matResult(int matReference[matSize][matSize], int matAprox[matSize][matSize], int matReturn[matSize][matSize]) {
+  for (int i = 0; i < matSize; i++) {
+    for (int j = 0; j < matSize; j++) {
+      matReturn[i][j] = matReference[i][j] - matAprox[i][j];
+    }
+  }
+}
+
+void cleanMatrix(int* value[matSize][matSize]) {
+  for (int i = 0; i < matSize; i++) {
+    for (int j = 0; j < matSize; j++) {
+      value[i][j] = "";
     }
   }
 }

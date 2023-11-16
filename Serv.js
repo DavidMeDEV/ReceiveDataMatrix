@@ -42,7 +42,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/mensagem', (req, res) => {
-    return res.send({content:textConcat})
+        res.send({content:textConcat})
+    return textConcat='' 
+
 })
 
 
