@@ -23,10 +23,10 @@ function claimFetch() {
 }
 
 function saveData() {
-
+  
   var conteudo = dataToSave;
 
-  var blob = new Blob([conteudo], { type: "text/plain" });
+  var blob = new Blob([conteudo], { type: 'text/csv' });
 
   var a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
