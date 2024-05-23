@@ -1,0 +1,6 @@
+Criem um código que: 
+* Peça 4 valores de nota (nota1,nota2,nota3,nota4)
+* Calcule a Média Artmética das notas ((nota1+nota2+nota3+nota4)/4)
+* Testar o valor (use a estrututra SE(){}) e se a nota for maior que ou igual a 7, deverá mostrar uma mensagem escrita "você passou" SENAO deverá mostrar uma mensagem escrita "você reprovou"
+
+DESAFIO: SE A NOTA ESTIVER ENTRE 6 E 4 A MENSAGEM DEVERÁ FALAR QUE O ALUNO FICOU EM RECUPERAÇÃO

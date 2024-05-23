@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 const porta = 3000
 
-const websocket = new WebSocket.Server({ port: 8080 });
+const websocket = new WebSocket.Server({ port: 80 });
 var user = [];
 
 websocket.on('connection', function (ws) {
@@ -24,7 +24,7 @@ websocket.on('connection', function (ws) {
             if (event.toString('utf8') != "Connected") {
                 text = event.toString('utf8')
                 textConcat+=text
-               // ws.send('11')
+                ws.send('11')
                 console.log(text)
             }
         }
@@ -33,8 +33,6 @@ websocket.on('connection', function (ws) {
         })
     });
 });
-
-
 
 app.use(express.static(path.join(__dirname, "/src/Server")));
 app.get('/', (req, res) => {
@@ -46,8 +44,6 @@ app.get('/mensagem', (req, res) => {
     return textConcat='' 
 
 })
-
-
 
 app.listen(porta, () => {
     console.clear()

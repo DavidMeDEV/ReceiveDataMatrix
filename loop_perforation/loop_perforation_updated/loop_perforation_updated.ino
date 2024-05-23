@@ -14,7 +14,7 @@ void mulMatNorm();
 
 const int matSize = 50;
 float perforationRate = 0.3;
-char validator = '0';
+char validator = '1';
 
 String matrixSend;
 
@@ -35,7 +35,6 @@ void webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
     case WStype_CONNECTED:
       {
         Serial.printf("[WSc] Connected to url: %s\n", payload);
-
         // send message to server when Connected
         webSocket.sendTXT("Connected");
       }
@@ -61,14 +60,15 @@ void webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
 
 void setup() {
   Serial.begin(115200);
+  pinMode(D1, INPUT_PULLUP);
   randomSeed(30);
-
+  validator = '5';
   for (uint8_t t = 4; t > 0; t--) {
     Serial.printf("[SETUP] BOOT WAIT %d...\n", t);
     delay(1000);
   }
 
-  WiFiMulti.addAP("Josi", "SOUSAcruz");
+  WiFiMulti.addAP("david", "david123");
 
   //WiFi.disconnect();
   while (WiFiMulti.run() != WL_CONNECTED) {
@@ -77,14 +77,15 @@ void setup() {
   }
   Serial.println("conectado!");
   // server address, port and URL
-  webSocket.begin("192.168.2.177", 8080, "/");
+  webSocket.begin("192.168.137.1", 80, "/message");
 
   // event handler
   webSocket.onEvent(webSocketEvent);
 
-  webSocket.setReconnectInterval(5000);
+  webSocket.setReconnectInterval(2000);
 
-  webSocket.enableHeartbeat(15000, 3000, 2);
+  webSocket.enableHeartbeat(5000, 3000, 2);
+
 
   for (int i = 0; i < matSize; i++) {
     for (int j = 0; j < matSize; j++) {
@@ -97,20 +98,18 @@ void setup() {
       data2[i][j] = random(300);
     }
   }
-
   validator = '1';
 }
 
 void loop() {
-  webSocket.loop();
-
   // Rotina de envio dos dados
-
-  if (validator != '0' && webSocket.isConnected()) {
-
-    mulMatNorm(data1, data2, dataSend);
+  webSocket.loop();
+  if (digitalRead(D1)) {
 
     int timeOnMillis = millis();
+    mulMatNorm(data1, data2, dataSend);
+    timeOnMillis = millis() - timeOnMillis;
+
     Serial.print("\n-------------------------Normal--------------------------\n");
 
     for (int i = 0; i < matSize; i++) {
@@ -124,22 +123,26 @@ void loop() {
       if (i == (matSize / 2) - 1) {
         webSocket.sendTXT(matrixSend);
         matrixSend = "";
+        Serial.println("reset da matriz");
       }
     }
 
-    timeOnMillis = millis() - timeOnMillis;
+    Serial.println("concat millis do normal");
     matrixSend += "\n" + (String)timeOnMillis + "ms\n";
     webSocket.sendTXT(matrixSend);
+
+    timeOnMillis = 0;
     matrixSend = "";
 
     for (int i = 0; i < matSize; i++) {
       for (int j = 0; j < matSize; j++) {
-        dataSend[i][j]=0;
+        dataSend[i][j] = 0;
       }
     }
 
     timeOnMillis = millis();
     mulMatMod(data1, data2, dataSend);
+    timeOnMillis = millis() - timeOnMillis;
 
     Serial.print("--------------------------Modular---------------------------\n");
     for (int i = 0; i < matSize; i++) {
@@ -156,20 +159,21 @@ void loop() {
       }
     }
 
-    timeOnMillis = millis() - timeOnMillis;
     matrixSend += "\n" + (String)timeOnMillis + "ms\n";
     webSocket.sendTXT(matrixSend);
+    timeOnMillis = 0;
     matrixSend = "";
 
     for (int i = 0; i < matSize; i++) {
       for (int j = 0; j < matSize; j++) {
-        dataSend[i][j]=0;
+        dataSend[i][j] = 0;
       }
     }
 
 
     timeOnMillis = millis();
     mulMatTrunc(data1, data2, dataSend);
+    timeOnMillis = millis() - timeOnMillis;
 
     Serial.print("-------------------------Truncation---------------------------\n");
     for (int i = 0; i < matSize; i++) {
@@ -186,25 +190,24 @@ void loop() {
       }
     }
 
-    timeOnMillis = millis() - timeOnMillis;
     matrixSend += "\n" + (String)timeOnMillis + "ms\n";
     webSocket.sendTXT(matrixSend);
+    timeOnMillis = 0;
     matrixSend = "";
 
-    validator = '0';
-
-  } else if (Serial.available()) {
-    validator = Serial.read();
-  } else {
-    validator = '0';
+    for (int i = 0; i < matSize; i++) {
+      for (int j = 0; j < matSize; j++) {
+        dataSend[i][j] = 0;
+      }
+    }
   }
 }
 
 void mulMatMod(int a[matSize][matSize], int b[matSize][matSize], int c[matSize][matSize]) {
-  for (int i = 0; i < matSize; i += (perforationRate * 10)) {
-    for (int j = 0; j < matSize; j += (perforationRate * 10)) {
+  for (int i = 0; i < matSize; i += 3) {
+    for (int j = 0; j < matSize; j += 3) {
       c[i][j] = 0;
-      for (int k = 0; k < matSize; k += (perforationRate * 10)) {
+      for (int k = 0; k < matSize; k += 3) {
         c[i][j] += a[i][k] * b[k][j];
       }
     }
@@ -212,10 +215,10 @@ void mulMatMod(int a[matSize][matSize], int b[matSize][matSize], int c[matSize][
 }
 
 void mulMatTrunc(int a[matSize][matSize], int b[matSize][matSize], int c[matSize][matSize]) {
-  for (int i = 0; i < matSize - (10 * perforationRate); i++) {
-    for (int j = 0; j < matSize - (10 * perforationRate); j++) {
+  for (int i = 0; i < matSize - 3; i++) {
+    for (int j = 0; j < matSize - 3; j++) {
       c[i][j] = 0;
-      for (int k = 0; k < matSize - (10 * perforationRate); k++) {
+      for (int k = 0; k < matSize - 3; k++) {
         c[i][j] += a[i][k] * b[k][j];
       }
     }
@@ -229,14 +232,6 @@ void mulMatNorm(int a[matSize][matSize], int b[matSize][matSize], int c[matSize]
       for (int k = 0; k < matSize; k++) {
         c[i][j] += a[i][k] * b[k][j];
       }
-    }
-  }
-}
-
-void matResult(int matReference[matSize][matSize], int matAprox[matSize][matSize], int matReturn[matSize][matSize]) {
-  for (int i = 0; i < matSize; i++) {
-    for (int j = 0; j < matSize; j++) {
-      matReturn[i][j] = matReference[i][j] - matAprox[i][j];
     }
   }
 }

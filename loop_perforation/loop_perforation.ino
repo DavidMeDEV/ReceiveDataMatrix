@@ -15,6 +15,9 @@ int data2[matSize][matSize];
 int dataSend[matSize][matSize];
 
 void setup() {
+
+  pinMode(D4, OUTPUT);
+  digitalWrite(D4, 1);
   Serial.begin(9600);
   randomSeed(30);
 
@@ -30,8 +33,11 @@ void setup() {
     }
   }
 
+
   cleanMatrix(dataSend);
+  digitalWrite(D4, 1);
   mulMatNorm(data1, data2, dataSend);
+  digitalWrite(D4, 0);
 
   int timeOnMillis = millis();
   Serial.print("\n-------------------------Normal--------------------------\n");
@@ -48,7 +54,9 @@ void setup() {
   timeOnMillis = millis();
 
   cleanMatrix(dataSend);
+  digitalWrite(D4, 1);
   mulMatMod(data1, data2, dataSend);
+  digitalWrite(D4, 0);
 
   Serial.print("--------------------------Modular---------------------------\n");
   for (int i = 0; i < matSize; i++) {
@@ -64,7 +72,9 @@ void setup() {
   timeOnMillis = millis();
 
   cleanMatrix(dataSend);
+  digitalWrite(D4, 1);
   mulMatTrunc(data1, data2, dataSend);
+  digitalWrite(D4, 0);
 
   Serial.print("-------------------------Truncation---------------------------\n");
   for (int i = 0; i < matSize; i++) {
@@ -78,9 +88,14 @@ void setup() {
   timeOnMillis = millis() - timeOnMillis;
   Serial.println();
   matrixSend += (String)timeOnMillis + "ms\n";
+
+
 }
 
+
 void loop() {
+
+
 }
 
 void mulMatMod(int a[matSize][matSize], int b[matSize][matSize], int c[matSize][matSize]) {
@@ -124,10 +139,10 @@ void matResult(int matReference[matSize][matSize], int matAprox[matSize][matSize
   }
 }
 
-void cleanMatrix(int* value[matSize][matSize]) {
+void cleanMatrix(int value[matSize][matSize]) {
   for (int i = 0; i < matSize; i++) {
     for (int j = 0; j < matSize; j++) {
-      value[i][j] = "";
+      value[i][j] = 0;
     }
   }
 }

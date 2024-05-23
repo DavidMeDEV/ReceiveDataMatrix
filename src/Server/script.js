@@ -1,7 +1,7 @@
 let printar = document.getElementById('h1')
 let dataToSave = "";
 
-function claimFetch() {
+ function claimFetch() {
 
   fetch('http://localhost:3000/mensagem')
     .then(response => {

@@ -1,0 +1,72 @@
+Load Voltage:  4.76 V
+Current:       76.00 mA
+Load Voltage:  4.85 V
+Current:       46.80 mA
+Load Voltage:  4.87 V
+Current:       47.20 mA
+Load Voltage:  4.83 V
+Current:       61.50 mA
+Load Voltage:  4.80 V
+Current:       61.70 mA
+Load Voltage:  4.77 V
+Current:       71.90 mA
+Load Voltage:  4.77 V
+Current:       73.60 mA
+Load Voltage:  4.77 V
+Current:       73.70 mA
+Load Voltage:  4.77 V
+Current:       73.60 mA
+Load Voltage:  4.77 V
+Current:       74.00 mA
+Load Voltage:  4.77 V
+Current:       73.80 mA
+Load Voltage:  4.77 V
+Current:       73.80 mA
+Load Voltage:  4.77 V
+Current:       73.90 mA
+Load Voltage:  4.77 V
+Current:       74.00 mA
+Load Voltage:  4.78 V
+Current:       73.80 mA
+Load Voltage:  4.78 V
+Current:       73.80 mA
+Load Voltage:  4.78 V
+Current:       73.70 mA
+Load Voltage:  4.77 V
+Current:       74.90 mA
+Load Voltage:  4.78 V
+Current:       73.60 mA
+Load Voltage:  4.77 V
+Current:       73.50 mA
+Load Voltage:  4.77 V
+Current:       73.70 mA
+Load Voltage:  4.77 V
+Current:       74.00 mA
+Load Voltage:  4.77 V
+Current:       73.60 mA
+Load Voltage:  4.76 V
+Current:       73.70 mA
+Load Voltage:  4.76 V
+Current:       73.40 mA
+Load Voltage:  4.76 V
+Current:       74.00 mA
+Load Voltage:  4.76 V
+Current:       75.30 mA
+Load Voltage:  4.76 V
+Current:       73.90 mA
+Load Voltage:  4.76 V
+Current:       73.60 mA
+Load Voltage:  4.76 V
+Current:       73.80 mA
+Load Voltage:  4.77 V
+Current:       73.80 mA
+Load Voltage:  4.76 V
+Current:       73.30 mA
+Load Voltage:  4.76 V
+Current:       73.30 mA
+Load Voltage:  4.76 V
+Current:       72.30 mA
+Load Voltage:  4.77 V
+Current:       73.60 mA
+Load Voltage:  4.77 V
+Current:       73.90 mA
