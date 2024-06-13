@@ -13,7 +13,7 @@ void mulMatNorm();
 //Variáveis
 
 const int matSize = 50;
-float perforationRate = 0.3;
+int perforationRate = (0.3)*10;
 char validator = '1';
 
 String matrixSend;
@@ -60,7 +60,7 @@ void webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
 
 void setup() {
   Serial.begin(115200);
-  pinMode(D1, INPUT_PULLUP);
+  pinMode(D1, INPUT);
   randomSeed(30);
   validator = '5';
   for (uint8_t t = 4; t > 0; t--) {
@@ -68,7 +68,7 @@ void setup() {
     delay(1000);
   }
 
-  WiFiMulti.addAP("david", "david123");
+  WiFiMulti.addAP("Josi", "SOUSAcruz");
 
   //WiFi.disconnect();
   while (WiFiMulti.run() != WL_CONNECTED) {
@@ -77,7 +77,7 @@ void setup() {
   }
   Serial.println("conectado!");
   // server address, port and URL
-  webSocket.begin("192.168.137.1", 80, "/message");
+  webSocket.begin("192.168.2.176", 80, "/message");
 
   // event handler
   webSocket.onEvent(webSocketEvent);
@@ -115,7 +115,7 @@ void loop() {
     for (int i = 0; i < matSize; i++) {
       for (int j = 0; j < matSize; j++) {
         matrixSend += dataSend[i][j];
-        matrixSend += " ";
+        matrixSend += ";";
       }
 
       matrixSend += "\n";
@@ -126,10 +126,13 @@ void loop() {
         Serial.println("reset da matriz");
       }
     }
-
-    Serial.println("concat millis do normal");
+     
+     delay(100);
+    //Serial.println("concat millis do normal");
     matrixSend += "\n" + (String)timeOnMillis + "ms\n";
     webSocket.sendTXT(matrixSend);
+
+
 
     timeOnMillis = 0;
     matrixSend = "";
@@ -148,7 +151,7 @@ void loop() {
     for (int i = 0; i < matSize; i++) {
       for (int j = 0; j < matSize; j++) {
         matrixSend += dataSend[i][j];
-        matrixSend += " ";
+        matrixSend += ";";
       }
 
       matrixSend += "\n";
@@ -159,6 +162,7 @@ void loop() {
       }
     }
 
+    delay(100);
     matrixSend += "\n" + (String)timeOnMillis + "ms\n";
     webSocket.sendTXT(matrixSend);
     timeOnMillis = 0;
@@ -179,7 +183,7 @@ void loop() {
     for (int i = 0; i < matSize; i++) {
       for (int j = 0; j < matSize; j++) {
         matrixSend += dataSend[i][j];
-        matrixSend += " ";
+        matrixSend += ";";
       }
 
       matrixSend += "\n";
@@ -190,6 +194,7 @@ void loop() {
       }
     }
 
+    delay(100);
     matrixSend += "\n" + (String)timeOnMillis + "ms\n";
     webSocket.sendTXT(matrixSend);
     timeOnMillis = 0;
@@ -200,14 +205,15 @@ void loop() {
         dataSend[i][j] = 0;
       }
     }
+  delay(1000);
   }
 }
 
 void mulMatMod(int a[matSize][matSize], int b[matSize][matSize], int c[matSize][matSize]) {
-  for (int i = 0; i < matSize; i += 3) {
-    for (int j = 0; j < matSize; j += 3) {
+  for (int i = 0; i < matSize; i++) {
+    for (int j = 0; j < matSize; j += perforationRate) {
       c[i][j] = 0;
-      for (int k = 0; k < matSize; k += 3) {
+      for (int k = 0; k < matSize; k++) {
         c[i][j] += a[i][k] * b[k][j];
       }
     }
@@ -215,10 +221,10 @@ void mulMatMod(int a[matSize][matSize], int b[matSize][matSize], int c[matSize][
 }
 
 void mulMatTrunc(int a[matSize][matSize], int b[matSize][matSize], int c[matSize][matSize]) {
-  for (int i = 0; i < matSize - 3; i++) {
-    for (int j = 0; j < matSize - 3; j++) {
+  for (int i = 0; i < matSize; i++) {
+    for (int j = 0; j < matSize - perforationRate; j++) {
       c[i][j] = 0;
-      for (int k = 0; k < matSize - 3; k++) {
+      for (int k = 0; k < matSize; k++) {
         c[i][j] += a[i][k] * b[k][j];
       }
     }
