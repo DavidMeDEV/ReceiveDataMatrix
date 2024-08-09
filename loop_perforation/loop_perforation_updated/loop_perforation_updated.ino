@@ -53,7 +53,7 @@ void webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
       break;
     case WStype_PONG:
       // answer to a ping we send
-      Serial.printf("[WSc] get pong\n");
+      //Serial.printf("[WSc] get pong\n");
       break;
   }
 }
@@ -68,23 +68,23 @@ void setup() {
     delay(1000);
   }
 
-  WiFiMulti.addAP("Josi", "SOUSAcruz");
+  WiFiMulti.addAP("david", "david123");
 
   //WiFi.disconnect();
   while (WiFiMulti.run() != WL_CONNECTED) {
-    Serial.println("conectando...");
+    Serial.println("conectando wifi...");
     delay(100);
   }
   Serial.println("conectado!");
   // server address, port and URL
-  webSocket.begin("192.168.2.176", 80, "/message");
+  webSocket.begin("192.168.137.1", 80, "/message");
 
   // event handler
   webSocket.onEvent(webSocketEvent);
 
-  webSocket.setReconnectInterval(2000);
+  //webSocket.setReconnectInterval(2000);
 
-  webSocket.enableHeartbeat(5000, 3000, 2);
+  //webSocket.enableHeartbeat(5000, 3000, 2);
 
 
   for (int i = 0; i < matSize; i++) {
@@ -205,7 +205,7 @@ void loop() {
         dataSend[i][j] = 0;
       }
     }
-  delay(1000);
+   delay(1000);
   }
 }
 
@@ -221,7 +221,7 @@ void mulMatMod(int a[matSize][matSize], int b[matSize][matSize], int c[matSize][
 }
 
 void mulMatTrunc(int a[matSize][matSize], int b[matSize][matSize], int c[matSize][matSize]) {
-  for (int i = 0; i < matSize; i++) {
+  for (int i = 0; i < matSize - perforationRate; i++) {
     for (int j = 0; j < matSize - perforationRate; j++) {
       c[i][j] = 0;
       for (int k = 0; k < matSize; k++) {
