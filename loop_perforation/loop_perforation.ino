@@ -7,7 +7,7 @@ void mulMatNorm();
 
 const int matSize = 50;
 int perforationRate = (0.3) * 10;
-;
+
 
 String matrixSend;
 
@@ -40,9 +40,14 @@ void loop() {
   int timeOnMillis = millis();
 
   cleanMatrix(dataSend);
+  digitalWrite(D4, 1);
   mulMatNorm(data1, data2, dataSend);
-
+   digitalWrite(D4, 0);
+   delay(200);
   Serial.print("inicio");
+
+  // controle da leitura dos dados de tensão/corrente
+
   Serial.println();
   Serial.print("\n-------------------------Normal--------------------------\n");
   Serial.println();
@@ -54,6 +59,7 @@ void loop() {
     Serial.println();
   }
 
+  
 
   timeOnMillis = millis() - timeOnMillis;
   matrixSend += (String)timeOnMillis + "ms\n";
@@ -62,7 +68,10 @@ void loop() {
 
   Serial.println();
   cleanMatrix(dataSend);
+  digitalWrite(D4, 1);
   mulMatMod(data1, data2, dataSend);
+  digitalWrite(D4, 0);
+  delay(200);
   Serial.println();
   Serial.print("--------------------------Modular---------------------------\n");
   Serial.println();
@@ -73,15 +82,16 @@ void loop() {
     }
     Serial.println();
   }
-
+    
   timeOnMillis = millis() - timeOnMillis;
   matrixSend += (String)timeOnMillis + "ms\n";
   timeOnMillis = millis();
 
   cleanMatrix(dataSend);
+  digitalWrite(D4, 1);
   mulMatTrunc(data1, data2, dataSend);
-
-  // Serial.print("inicio");
+  digitalWrite(D4, 0);
+  delay(200);
   Serial.println();
   Serial.println();
   Serial.print("-------------------------Truncation---------------------------\n");

@@ -2,34 +2,38 @@
 #include <Adafruit_INA219.h>
 #include <String.h>
 
+
+int prevState = 0;
+int state=0;
+
 Adafruit_INA219 ina219;
+
+int counter = 0;
+float analyzedata = 0;
+float shuntvoltage = 0;
+float busvoltage = 0;
+float current_mA = 0;
+float loadvoltage = 0;
+float power_mW = 0;
 
 
 void setup(void) {
   Serial.begin(9600);
-  pinMode(D4, INPUT);
-// Initialize the INA219.
-// By default the initialization will use the largest range (32V, 2A).  However
-// you can call a setCalibration function to change this range (see comments).
-if (!ina219.begin()) {
-  Serial.println("Failed to find INA219 chip");
-  while (1) { delay(10); }
-}
-// To use a slightly lower 32V, 1A range (higher precision on amps):
-//ina219.setCalibration_32V_1A();
-// Or to use a lower 16V, 400mA range (higher precision on volts and amps):
-//ina219.setCalibration_16V_400mA();
+  pinMode(D5, INPUT);
 
-Serial.println("Measuring voltage and current with INA219 ...");
+
+
+  if (!ina219.begin()) {
+    Serial.println("Failed to find INA219 chip");
+    while (1) { delay(10); }
+  }
+  // Serial.println("Measuring voltage and current with INA219 ...");
+  Serial.println("inicio");
 }
 
+int timeOnMillis;
 void loop(void) {
-  float analyzedata = 0;
-  float shuntvoltage = 0;
-  float busvoltage = 0;
-  float current_mA = 0;
-  float loadvoltage = 0;
-  float power_mW = 0;
+
 
   shuntvoltage = ina219.getShuntVoltage_mV();
   busvoltage = ina219.getBusVoltage_V();
@@ -37,12 +41,26 @@ void loop(void) {
   power_mW = ina219.getPower_mW();
   loadvoltage = busvoltage + (shuntvoltage / 1000);
 
-  
-  if(digitalRead(D4)>0){
-  Serial.print("Load Voltage:  "); Serial.print(loadvoltage); Serial.println(" V");
-  Serial.print("Current:       ");Serial.print(current_mA);Serial.println(" mA");  
-  //delayMicroseconds(100);
-  }else{
-    //Serial.println("______________________________________");
+
+  if (digitalRead(D5) == 1) {
+
+    Serial.print((String)loadvoltage + "V;");
+    Serial.print((String)current_mA + "mA;");
+    Serial.println();
   }
+  state=digitalRead(D5);
+
+  if(state!=prevState){
+    prevState=state;
+    if(state==1){
+      //Serial.println("recebendo millis");
+      timeOnMillis=millis();
+    }
+    if(state==0){
+      timeOnMillis = millis() - timeOnMillis;
+      Serial.print((String)timeOnMillis + "ms\n");
+      Serial.println("-------------------------------------------------------");
+    }
+  }
+  
 }
