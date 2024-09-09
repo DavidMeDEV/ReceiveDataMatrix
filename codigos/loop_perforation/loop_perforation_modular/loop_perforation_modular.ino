@@ -1,12 +1,12 @@
 #include <String.h>
 
 void cleanMatrix();
-void mulMatTrunc();
+void mulMatMod();
 
 const int matSize = 50;
 float perforationRate = 0.3;
 
-String matrixSend;
+String timeSend;
 
 int data1[matSize][matSize];
 int data2[matSize][matSize];
@@ -31,27 +31,27 @@ void setup() {
     }
   }
 
-    cleanMatrix(dataSend);
-    digitalWrite(D4, 1);
-    Serial.println("trunc");  
-  for(int cont=0; cont<=100; cont++){
-    mulMatTrunc(data1, data2, dataSend);
+  int timeOnMillis = millis();
+
+  cleanMatrix(dataSend);
+  //Serial.println("modular");
+  for (int cont = 0; cont <= 100; cont++) {
+    mulMatMod(data1, data2, dataSend);
   }
-    digitalWrite(D4, 0);
+
+  timeOnMillis = millis() - timeOnMillis;
+  timeSend += (String)timeOnMillis + "ms\n";
+  Serial.println(timeSend);
 }
-
-
 void loop() {
-
-
+  // put your main code here, to run repeatedly:
 }
 
-
-void mulMatTrunc(int a[matSize][matSize], int b[matSize][matSize], int c[matSize][matSize]) {
-  for (int i = 0; i < matSize - 3; i++) {
-    for (int j = 0; j < matSize - 3; j++) {
+void mulMatMod(int a[matSize][matSize], int b[matSize][matSize], int c[matSize][matSize]) {
+  for (int i = 0; i < matSize; i += 3) {
+    for (int j = 0; j < matSize; j += 3) {
       c[i][j] = 0;
-      for (int k = 0; k < matSize - 3; k++) {
+      for (int k = 0; k < matSize; k += 3) {
         c[i][j] += a[i][k] * b[k][j];
       }
     }

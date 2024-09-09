@@ -6,7 +6,7 @@ void mulMatNorm();
 const int matSize = 50;
 float perforationRate = 0.3;
 
-String matrixSend;
+String timeSend;
 
 int data1[matSize][matSize];
 int data2[matSize][matSize];
@@ -31,14 +31,16 @@ void setup() {
     }
   }
 
+  int timeOnMillis = millis();
 
   cleanMatrix(dataSend);
-  Serial.println("normal");
-  digitalWrite(D4, 1);
+  //Serial.println("normal");
   for (int cont = 0; cont <= 100; cont++) {
     mulMatNorm(data1, data2, dataSend);
   }
-  digitalWrite(D4, 0);
+  timeOnMillis = millis() - timeOnMillis;
+  timeSend += (String)timeOnMillis + "ms\n";
+  Serial.println(timeSend);
 }
 
 void loop() {

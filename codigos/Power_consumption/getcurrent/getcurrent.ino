@@ -8,7 +8,8 @@ int state=0;
 
 Adafruit_INA219 ina219;
 
-int counter = 0;
+int counter1 = 0;
+int counter10 = 0;
 float analyzedata = 0;
 float shuntvoltage = 0;
 float busvoltage = 0;
@@ -45,7 +46,7 @@ void loop(void) {
   if (digitalRead(D5) == 1) {
 
     Serial.print((String)loadvoltage + "V;");
-    Serial.print((String)current_mA + "mA;");
+    Serial.print((String)current_mA + "mA");
     Serial.println();
   }
   state=digitalRead(D5);
@@ -60,7 +61,17 @@ void loop(void) {
       timeOnMillis = millis() - timeOnMillis;
       Serial.print((String)timeOnMillis + "ms\n");
       Serial.println("-------------------------------------------------------");
+      counter1++;
+
+      if(counter1==3){
+        counter10++;
+        counter1=0;
+      }
     }
   }
   
+  if(counter10>=100){
+    Serial.println("fim");
+    counter10=0;
+  }
 }
